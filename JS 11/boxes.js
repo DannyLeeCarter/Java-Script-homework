@@ -6,13 +6,13 @@ const switchButton = document.getElementById("switch-btn");
 
 switchButton.addEventListener("click", () => {
   // Store the current background color of the red box
-  const currentRedColor = redBox.style.backgroundColor;
+ const currentRedColor = redBox.style.backgroundColor;
 
   // Set the background color of the red box to the current background color of the blue box
-  redBox.style.backgroundColor = blueBox.style.backgroundColor;
+redBox.style.backgroundColor = blueBox.style.backgroundColor;
 
   // Set the background color of the blue box to the stored current background color of the red box
-  blueBox.style.backgroundColor = currentRedColor;
+blueBox.style.backgroundColor = currentRedColor;
 });
 
 // Change the background color of the clicked box
