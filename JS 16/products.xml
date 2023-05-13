@@ -1,0 +1,22 @@
+<products>
+<product id="1">
+<name>Computer</name>
+<price>1000</price>
+<quantity>10</quantity>
+
+<description>A powerful computer with 16GB of RAM and a 1TB hard drive.</description>
+
+</product>
+<product id="2">
+<name>Monitor</name>
+<price>300</price>
+<quantity>20</quantity>
+<description>A 27-inch, 1080p monitor with a fast refresh rate.</description>
+</product>
+<product id="3">
+<name>Keyboard</name>
+<price>50</price>
+<quantity>30</quantity>
+<description>A wireless keyboard with a built-in touchpad.</description>
+</product>
+</products>
