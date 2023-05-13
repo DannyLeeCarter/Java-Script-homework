@@ -1,0 +1,27 @@
+[
+  {
+    "title": "The Shawshank Redemption",
+    "director": "Frank Darabont",
+    "release_date": "1994-09-23"
+  },
+  {
+    "title": "The Godfather",
+    "director": "Francis Ford Coppola",
+    "release_date": "1972-03-24"
+  },
+  {
+    "title": "The Godfather: Part II",
+    "director": "Francis Ford Coppola",
+    "release_date": "1974-12-20"
+  },
+  {
+    "title": "The Dark Knight",
+    "director": "Christopher Nolan",
+    "release_date": "2008-07-16"
+  },
+  {
+    "title": "12 Angry Men",
+    "director": "Sidney Lumet",
+    "release_date": "1957-04-10"
+  }
+]
