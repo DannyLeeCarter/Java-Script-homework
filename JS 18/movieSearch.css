@@ -1,0 +1,28 @@
+.loading {
+    display: none;
+  }
+  
+  label {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 15px;
+  }
+  
+  #movies-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+    list-style: none;
+    padding: 0;
+  }
+  
+  #movies-list li {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  @media (max-width: 600px) {
+    #movies-list {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+  }
+  

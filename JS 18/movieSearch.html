@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search App</title>
+    <link rel="stylesheet" type="text/css" href="movieSearch.css">
+</head>
+<body>
+    <h1>Movie Search</h1>
+    <form id="search-form">
+    <label for="movie-title">Enter a Movie Title and click search:</label>
+    <br/>
+    <input type="text" id="movie-title" required>
+    <button type="submit">Search</button>
+  </form>
+
+  <div id="results">
+    <h2>Movie Search Results!</h2>
+    <ul id="movies-list"></ul>
+  </div>
+
+  <div id="loading" class="loading">Loading...</div>
+  <script src="movieSearch.js"></script>
+</body>
+</html>
