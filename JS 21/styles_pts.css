@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="number"],
+button {
+    margin-top: 5px;
+}
+
+#passenger-list li,
+#vehicle-list li {
+    margin-bottom: 5px;
+}
