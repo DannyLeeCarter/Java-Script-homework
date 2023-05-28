@@ -1,0 +1,11 @@
+h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .band-info {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #333;
+    background-color: #f5f5f5;
+  }
