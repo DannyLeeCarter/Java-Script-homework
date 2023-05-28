@@ -14,8 +14,6 @@ class RockBand {
   
   // Create instances of the RockBand class and call methods
   let metallica = new RockBand("Metallica", ["James Hetfield", "Lars Ulrich", "Kirk Hammett", "Robert Trujillo"], "Heavy Metal");
-  metallica.display(); // Metallica is a Heavy Metal band, with members James Hetfield, Lars Ulrich, Kirk Hammett, Robert Trujillo.
-  
   let pinkFloyd = new RockBand("Pink Floyd", ["David Gilmour", "Roger Waters", "Nick Mason", "Richard Wright"], "Progressive Rock");
   let ledZeppelin = new RockBand("Led Zeppelin", ["Robert Plant", "Jimmy Page", "John Paul Jones", "John Bonham"], "Hard Rock");
   let theCure = new RockBand("The Cure", ["Robert Smith", "Simon Gallup", "Roger O'Donnell", "Jason Cooper", "Reeves Gabrels"], "Gothic Rock");
@@ -23,7 +21,8 @@ class RockBand {
   let tearsForFears = new RockBand("Tears for Fears", ["Roland Orzabal", "Curt Smith"], "New Wave");
   let aliceInChains = new RockBand("Alice in Chains", ["Jerry Cantrell", "Sean Kinney", "Mike Inez", "William DuVall"], "Grunge");
   let tool = new RockBand("Tool", ["Maynard James Keenan", "Adam Jones", "Justin Chancellor", "Danny Carey"], "Progressive Metal");
-  
+ 
+  metallica.display();
   pinkFloyd.display();
   ledZeppelin.display();
   theCure.display();
