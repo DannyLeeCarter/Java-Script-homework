@@ -23,6 +23,9 @@ body {
   .active {
     background-color: lightgray;
   }
+  .completed {
+    text-decoration: line-through;
+  }  
   
   li {
     list-style-type: none;
