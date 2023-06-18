@@ -1,13 +1,12 @@
-// game.js
-// 1. Grab a reference to the canvas
+// Grab a reference to the canvas
 let canvas = document.getElementById("game-canvas");
 let context = canvas.getContext("2d");
 
-// 2. Set canvas dimensions
+// Set canvas dimensions
 canvas.width = 800;
 canvas.height = 600;
 
-// 3. Create player and enemy objects
+// Create player and enemy objects
 class Player {
   constructor(x, y) {
     this.x = x;
@@ -58,7 +57,7 @@ let enemies = [
   new Enemy(300, 150),
 ];
 
-// 4. Render the game state
+// Render the game state
 function render() {
   context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -73,7 +72,7 @@ function render() {
   });
 }
 
-// 5. Handle user input
+// Handle user input
 document.onkeydown = function (event) {
   if (event.code === "ArrowLeft") {
     player.moveLeft();
@@ -89,7 +88,7 @@ document.onkeydown = function (event) {
   }
 };
 
-// 6. Update game state and render
+// Update game state and render
 function update() {
   // Move enemies
   enemies.forEach((enemy) => {
