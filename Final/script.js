@@ -88,16 +88,55 @@ async function addEvent(e) {
 
 // Function to display the events
 function displayEvents() {
+  // Retrieve events from local storage
+  const events = JSON.parse(localStorage.getItem('events')) || [];
+
+  // Clear the events container
+  eventsContainer.innerHTML = '';
+
+  // Iterate over the events and create HTML elements for each
+  events.forEach(event => {
+    const eventCard = document.createElement('div');
+    eventCard.classList.add('event-card');
+
+    // Create and append elements for event details
+    const eventName = document.createElement('h2');
+    eventName.textContent = event.name;
+    eventCard.appendChild(eventName);
+
+    const eventDate = document.createElement('p');
+    eventDate.textContent = `Date: ${event.date}`;
+    eventCard.appendChild(eventDate);
+
+    const eventTime = document.createElement('p');
+    eventTime.textContent = `Time: ${event.time}`;
+    eventCard.appendChild(eventTime);
+
+    const eventLocation = document.createElement('p');
+    eventLocation.textContent = `Location: ${event.location.lat}, ${event.location.lng}`;
+    eventCard.appendChild(eventLocation);
+
+    const eventNotes = document.createElement('p');
+    eventNotes.textContent = `Notes: ${event.notes}`;
+    eventCard.appendChild(eventNotes);
+
+    // Append the event card to the events container
+    eventsContainer.appendChild(eventCard);
+  });
 }
+
 // Function to edit an event
 function editEvent(event) {
 }
+
 // Function to delete an event
 function deleteEvent(event) {
 }
+
 // Function to search for events
 function searchEvents() {
 }
+
 // Add event listener for form submission
 eventForm.addEventListener('submit', addEvent);
 
@@ -106,3 +145,4 @@ searchButton.addEventListener('click', searchEvents);
 
 // Call the displayEvents function to show the initial events
 displayEvents();
+
