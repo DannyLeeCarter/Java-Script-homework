@@ -16,10 +16,16 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(map);
 
 // Function to create and append a button element
-function createButton(text, clickHandler) {
+function createButton(text, clickHandler, parentElement) {
+  if (typeof text !== 'string' || typeof clickHandler !== 'function') {
+    throw new Error('Invalid arguments: text must be a string and clickHandler must be a function');
+  }
   const button = document.createElement('button');
   button.textContent = text;
   button.addEventListener('click', clickHandler);
+  if (parentElement) {
+    parentElement.appendChild(button);
+  }
   return button;
 }
 
@@ -86,6 +92,12 @@ async function addEvent(e) {
   }
 }
 
+// Function to create event markers on the map
+function createEventMarker(event) {
+  const marker = L.marker([event.location.lat, event.location.lng]).addTo(map);
+  marker.bindPopup(event.name).openPopup(); // Add a popup with the event name and open it by default
+}
+
 // Function to display the events
 function displayEvents() {
   // Retrieve events from local storage
@@ -120,21 +132,137 @@ function displayEvents() {
     eventNotes.textContent = `Notes: ${event.notes}`;
     eventCard.appendChild(eventNotes);
 
+    // Create edit and delete buttons
+    const editButton = createButton('Edit', () => editEvent(event), eventCard);
+    const deleteButton = createButton('Delete', () => deleteEvent(event), eventCard);
+
     // Append the event card to the events container
     eventsContainer.appendChild(eventCard);
+
+    // Create markers on the map for each event
+    createEventMarker(event);
   });
 }
 
 // Function to edit an event
 function editEvent(event) {
+  // Retrieve the input fields from the form
+  const eventNameField = document.getElementById('eventName');
+  const eventDateField = document.getElementById('eventDate');
+  const eventTimeField = document.getElementById('eventTime');
+  const eventLocationField = document.getElementById('eventLocation');
+  const eventNotesField = document.getElementById('eventNotes');
+
+  // Set the form fields with the event details for editing
+  eventNameField.value = event.name;
+  eventDateField.value = event.date;
+  eventTimeField.value = event.time;
+  eventLocationField.value = `${event.location.lat}, ${event.location.lng}`;
+  eventNotesField.value = event.notes;
+
+  // Update the form submit event to handle editing
+  eventForm.removeEventListener('submit', addEvent); // Remove the addEvent listener
+  eventForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Update the event object with the edited values
+    event.name = eventNameField.value;
+    event.date = eventDateField.value;
+    event.time = eventTimeField.value;
+    event.notes = eventNotesField.value;
+
+    // Retrieve the updated events from local storage
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+
+    // Find the index of the event in the array
+    const eventIndex = events.findIndex(
+      e => e.name === event.name && e.date === event.date && e.location.lat === event.location.lat && e.location.lng === event.location.lng
+    );
+
+    // Update the event in the array
+    events[eventIndex] = event;
+
+    // Store the updated events array in local storage
+    localStorage.setItem('events', JSON.stringify(events));
+
+    // Reset the form fields
+    eventForm.reset();
+
+    // Refresh the displayed events
+    displayEvents();
+  });
 }
 
 // Function to delete an event
 function deleteEvent(event) {
+  // Retrieve the events from local storage
+  let events = JSON.parse(localStorage.getItem('events')) || [];
+
+  // Find the index of the event in the array
+  const eventIndex = events.findIndex(
+    e => e.name === event.name && e.date === event.date && e.location.lat === event.location.lat && e.location.lng === event.location.lng
+  );
+
+  // Remove the event from the array
+  events.splice(eventIndex, 1);
+
+  // Store the updated events array in local storage
+  localStorage.setItem('events', JSON.stringify(events));
+
+  // Refresh the displayed events
+  displayEvents();
 }
 
 // Function to search for events
 function searchEvents() {
+  const searchTerm = searchInput.value.toLowerCase();
+  const events = JSON.parse(localStorage.getItem('events')) || [];
+
+  // Filter events based on the search term
+  const filteredEvents = events.filter(event => {
+    const eventName = event.name.toLowerCase();
+    return eventName.includes(searchTerm);
+  });
+
+  // Clear the events container
+  eventsContainer.innerHTML = '';
+
+  // Display the filtered events
+  filteredEvents.forEach(event => {
+    const eventCard = document.createElement('div');
+    eventCard.classList.add('event-card');
+
+    // Create and append elements for event details
+    const eventName = document.createElement('h2');
+    eventName.textContent = event.name;
+    eventCard.appendChild(eventName);
+
+    const eventDate = document.createElement('p');
+    eventDate.textContent = `Date: ${event.date}`;
+    eventCard.appendChild(eventDate);
+
+    const eventTime = document.createElement('p');
+    eventTime.textContent = `Time: ${event.time}`;
+    eventCard.appendChild(eventTime);
+
+    const eventLocation = document.createElement('p');
+    eventLocation.textContent = `Location: ${event.location.lat}, ${event.location.lng}`;
+    eventCard.appendChild(eventLocation);
+
+    const eventNotes = document.createElement('p');
+    eventNotes.textContent = `Notes: ${event.notes}`;
+    eventCard.appendChild(eventNotes);
+
+    // Create edit and delete buttons
+    const editButton = createButton('Edit', () => editEvent(event), eventCard);
+    const deleteButton = createButton('Delete', () => deleteEvent(event), eventCard);
+
+    // Append the event card to the events container
+    eventsContainer.appendChild(eventCard);
+
+    // Create markers on the map for each event
+    createEventMarker(event);
+  });
 }
 
 // Add event listener for form submission
@@ -145,4 +273,3 @@ searchButton.addEventListener('click', searchEvents);
 
 // Call the displayEvents function to show the initial events
 displayEvents();
-
