@@ -42,7 +42,11 @@ async function geocodeAddress(address) {
       throw new Error('No results found for the provided address');
     }
     const coordinates = data.features[0].center;
-    return { lat: coordinates[1], lng: coordinates[0] };
+    return {
+      lat: coordinates[1],
+      lng: coordinates[0],
+      address: data.features[0].place_name
+    };
   } catch (error) {
     throw new Error(`Error occurred during geocoding: ${error.message}`);
   }
@@ -60,7 +64,7 @@ async function addEvent(e) {
   const eventNotes = document.getElementById('eventNotes').value;
 
   try {
-    // Geocode the event location to retrieve latitude and longitude
+    // Geocode the event location to retrieve latitude, longitude, and address
     const coordinates = await geocodeAddress(eventLocation);
     const event = {
       name: eventName,
@@ -99,7 +103,7 @@ function createEventMarker(event) {
 }
 
 // Function to display the events
-function displayEvents() {
+async function displayEvents() {
   // Retrieve events from local storage
   const events = JSON.parse(localStorage.getItem('events')) || [];
 
@@ -107,7 +111,7 @@ function displayEvents() {
   eventsContainer.innerHTML = '';
 
   // Iterate over the events and create HTML elements for each
-  events.forEach(event => {
+  for (const event of events) {
     const eventCard = document.createElement('div');
     eventCard.classList.add('event-card');
 
@@ -124,9 +128,15 @@ function displayEvents() {
     eventTime.textContent = `Time: ${event.time}`;
     eventCard.appendChild(eventTime);
 
-    const eventLocation = document.createElement('p');
-    eventLocation.textContent = `Location: ${event.location.lat}, ${event.location.lng}`;
-    eventCard.appendChild(eventLocation);
+    // Geocode the event location to retrieve the address
+    try {
+      const address = await getAddressFromCoordinates(event.location.lat, event.location.lng);
+      const eventLocation = document.createElement('p');
+      eventLocation.textContent = `Location: ${address}`;
+      eventCard.appendChild(eventLocation);
+    } catch (error) {
+      console.error('Error occurred during reverse geocoding:', error);
+    }
 
     const eventNotes = document.createElement('p');
     eventNotes.textContent = `Notes: ${event.notes}`;
@@ -141,7 +151,17 @@ function displayEvents() {
 
     // Create markers on the map for each event
     createEventMarker(event);
-  });
+  }
+}
+
+// Function to get address from coordinates using geocodeAddress function
+async function getAddressFromCoordinates(lat, lng) {
+  try {
+    const response = await geocodeAddress(`${lng},${lat}`);
+    return response.address;
+  } catch (error) {
+    throw new Error(`Error occurred during reverse geocoding: ${error.message}`);
+  }
 }
 
 // Function to edit an event
@@ -245,9 +265,15 @@ function searchEvents() {
     eventTime.textContent = `Time: ${event.time}`;
     eventCard.appendChild(eventTime);
 
-    const eventLocation = document.createElement('p');
-    eventLocation.textContent = `Location: ${event.location.lat}, ${event.location.lng}`;
-    eventCard.appendChild(eventLocation);
+    // Geocode the event location to retrieve the address
+    try {
+      const address = getAddressFromCoordinates(event.location.lat, event.location.lng);
+      const eventLocation = document.createElement('p');
+      eventLocation.textContent = `Location: ${address}`;
+      eventCard.appendChild(eventLocation);
+    } catch (error) {
+      console.error('Error occurred during reverse geocoding:', error);
+    }
 
     const eventNotes = document.createElement('p');
     eventNotes.textContent = `Notes: ${event.notes}`;

@@ -1,72 +1,87 @@
 /* Apply some general styling */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  /* Style the form */
-  #eventForm {
-    margin-bottom: 20px;
-  }
-  
-  #eventForm label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  #mapContainer {
-    height: 400px;
-  }
-  
-  
-  #eventForm input[type="text"],
-  #eventForm input[type="date"],
-  #eventForm input[type="time"],
-  #eventForm textarea {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
-  }
-  
-  #eventForm button[type="submit"] {
-    display: block;
-    margin: 10px auto;
-  }
-  
-  /* Style the search functionality */
-  #searchInput {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
-  }
-  
-  /* Style the events container */
+  font-family: 'Lumanosimo', cursive, 'Roboto', Arial, sans-serif; /* Use the new font */
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 50px;
+  color: #0066ff;
+}
+
+/* Style the form */
+#eventForm {
+  margin-bottom: 20px;
+}
+
+#eventForm label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#mapContainer {
+  height: 400px;
+}
+
+#eventForm input[type="text"],
+#eventForm input[type="date"],
+#eventForm input[type="time"],
+#eventForm textarea {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#eventForm button[type="submit"] {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #007bff; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style the search functionality */
+#searchInput {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style the events container */
+#eventsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+}
+
+.event-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+/* Style the edit and delete buttons */
+.event-card button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #007bff; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Add some responsive design */
+@media screen and (max-width: 768px) {
   #eventsContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-  
-  .event-card {
-    border: 1px solid #ccc;
-    padding: 10px;
-  }
-  
-  /* Style the edit and delete buttons */
-  .event-card button {
-    margin-top: 5px;
-    padding: 5px 10px;
-  }
-  
-  /* Add some responsive design */
-  @media screen and (max-width: 768px) {
-    #eventsContainer {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-  }
-  
+}
