@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Water Intake Tracker</title>
+    <!-- Add Bulma CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Daily Water Intake Tracker</h1>
+        <div class="columns">
+            <div class="column">
+                <label class="label">Enter Water Intake (in ml)</label>
+                <input class="input" type="number" id="waterIntake" placeholder="Enter amount in ml">
+                <button class="button is-primary" onclick="logWaterIntake()">Log Intake</button>
+            </div>
+            <div class="column">
+                <p class="subtitle">Total Water Consumed Today:</p>
+                <p id="totalWaterConsumed">0 ml</p>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <canvas id="waterIntakeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lockr/0.8.4/lockr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"></script>
+    <script src="app.js"></script>
+        
+</body>
+</html>
+
