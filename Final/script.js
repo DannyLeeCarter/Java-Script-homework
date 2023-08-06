@@ -94,6 +94,38 @@ async function addEvent(e) {
   } catch (error) {
     console.error('Error occurred during geocoding:', error);
   }
+
+  try {
+    // Geocode the event location to retrieve latitude, longitude, and address
+    const coordinates = await geocodeAddress(eventLocation);
+    const event = {
+      name: eventName,
+      date: eventDate,
+      time: eventTime,
+      notes: eventNotes,
+      location: {
+        lat: coordinates.lat,
+        lng: coordinates.lng
+      }
+    };
+
+    // Retrieve existing events from local storage
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+
+    // Add the new event to the array
+    events.push(event);
+
+    // Store the updated events array in local storage
+    localStorage.setItem('events', JSON.stringify(events));
+
+    // Reset the form fields
+    eventForm.reset();
+
+    // Refresh the displayed events
+    displayEvents();
+  } catch (error) {
+    console.error('Error occurred during geocoding:', error);
+  }
 }
 
 // Function to create event markers on the map
@@ -171,7 +203,7 @@ async function getAddressFromCoordinates(lat, lng) {
   }
 }
 
-// Function to edit an event
+/// Function to edit an event
 async function editEvent(event, eventCard) {
   // Retrieve the input fields from the form
   const eventNameField = document.getElementById('eventName');
@@ -194,11 +226,21 @@ async function editEvent(event, eventCard) {
     eventLocationField.value = ''; // Set to empty string if reverse geocoding fails
   }
 
-  // Remove the previous edit button and create a save button for this event
-  eventCard.removeChild(eventCard.lastChild);
+  // Hide the edit button and show the save button
+  const editButton = eventCard.querySelector('button[data-action="edit"]');
+  editButton.style.display = 'none';
   const saveButton = createButton('Save', () => saveEvent(event, eventCard), eventCard);
+  saveButton.setAttribute('data-action', 'save');
+  eventCard.appendChild(saveButton);
+  
+  // Disable the form fields for editing
+  eventNameField.disabled = true;
+  eventDateField.disabled = true;
+  eventTimeField.disabled = true;
+  eventLocationField.disabled = true;
+  eventNotesField.disabled = true;
 
-  // Re-enable the form fields and add the edit button back
+  // Re-enable the form fields and add the edit button back after saving
   eventNameField.disabled = false;
   eventDateField.disabled = false;
   eventTimeField.disabled = false;
@@ -253,6 +295,8 @@ function saveEvent(event, eventCard) {
   // Refresh the displayed events
   displayEvents();
 }
+
+
 
 // Function to delete an event
 function deleteEvent(event) {
@@ -340,3 +384,4 @@ searchButton.addEventListener('click', searchEvents);
 
 // Call the displayEvents function to show the initial events
 displayEvents();
+
