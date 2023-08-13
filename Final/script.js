@@ -228,7 +228,7 @@ async function editEvent(event, eventCard) {
 
   // Hide the edit button and show the save button
   const editButton = eventCard.querySelector('button[data-action="edit"]');
-  editButton.style.display = 'none';
+  
   const saveButton = createButton('Save', () => saveEvent(event, eventCard), eventCard);
   saveButton.setAttribute('data-action', 'save');
   eventCard.appendChild(saveButton);
@@ -384,4 +384,3 @@ searchButton.addEventListener('click', searchEvents);
 
 // Call the displayEvents function to show the initial events
 displayEvents();
-
