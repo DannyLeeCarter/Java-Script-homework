@@ -94,39 +94,7 @@ async function addEvent(e) {
   } catch (error) {
     console.error('Error occurred during geocoding:', error);
   }
-
-  try {
-    // Geocode the event location to retrieve latitude, longitude, and address
-    const coordinates = await geocodeAddress(eventLocation);
-    const event = {
-      name: eventName,
-      date: eventDate,
-      time: eventTime,
-      notes: eventNotes,
-      location: {
-        lat: coordinates.lat,
-        lng: coordinates.lng
-      }
-    };
-
-    // Retrieve existing events from local storage
-    let events = JSON.parse(localStorage.getItem('events')) || [];
-
-    // Add the new event to the array
-    events.push(event);
-
-    // Store the updated events array in local storage
-    localStorage.setItem('events', JSON.stringify(events));
-
-    // Reset the form fields
-    eventForm.reset();
-
-    // Refresh the displayed events
-    displayEvents();
-  } catch (error) {
-    console.error('Error occurred during geocoding:', error);
   }
-}
 
 // Function to create event markers on the map
 function createEventMarker(event) {
@@ -203,7 +171,7 @@ async function getAddressFromCoordinates(lat, lng) {
   }
 }
 
-/// Function to edit an event
+// Function to edit an event
 async function editEvent(event, eventCard) {
   // Retrieve the input fields from the form
   const eventNameField = document.getElementById('eventName');
@@ -213,11 +181,12 @@ async function editEvent(event, eventCard) {
   const eventNotesField = document.getElementById('eventNotes');
 
   // Set the form fields with the event details for editing
+  eventLocationField.value = event.location.address;
   eventNameField.value = event.name;
   eventDateField.value = event.date;
   eventTimeField.value = event.time;
   eventNotesField.value = event.notes;
-
+  
   try {
     const address = await getAddressFromCoordinates(event.location.lat, event.location.lng);
     eventLocationField.value = address;
@@ -225,45 +194,47 @@ async function editEvent(event, eventCard) {
     console.error('Error occurred during reverse geocoding:', error);
     eventLocationField.value = ''; // Set to empty string if reverse geocoding fails
   }
-
-  // Hide the edit button and show the save button
-  const editButton = eventCard.querySelector('button[data-action="edit"]');
-  
-  const saveButton = createButton('Save', () => saveEvent(event, eventCard), eventCard);
-  saveButton.setAttribute('data-action', 'save');
-  eventCard.appendChild(saveButton);
-  
-  // Disable the form fields for editing
-  eventNameField.disabled = true;
-  eventDateField.disabled = true;
-  eventTimeField.disabled = true;
-  eventLocationField.disabled = true;
-  eventNotesField.disabled = true;
-
-  // Re-enable the form fields and add the edit button back after saving
-  eventNameField.disabled = false;
-  eventDateField.disabled = false;
-  eventTimeField.disabled = false;
-  eventLocationField.disabled = false;
-  eventNotesField.disabled = false;
+   
+    const saveButton = createButton('Save', () => saveEvent(event, eventCard), eventCard);
+    saveButton.setAttribute('data-action', 'save');
+    eventCard.appendChild(saveButton);
+   
 }
 
+// Retrieve the input fields from the form
+const eventNameField = document.getElementById('eventName');
+const eventDateField = document.getElementById('eventDate');
+const eventTimeField = document.getElementById('eventTime');
+const eventLocationField = document.getElementById('eventLocation');
+const eventNotesField = document.getElementById('eventNotes');
 
 // Function to save an edited event
-function saveEvent(event, eventCard) {
-  // Retrieve the input fields from the form
-  const eventNameField = document.getElementById('eventName');
-  const eventDateField = document.getElementById('eventDate');
-  const eventTimeField = document.getElementById('eventTime');
-  const eventLocationField = document.getElementById('eventLocation');
-  const eventNotesField = document.getElementById('eventNotes');
-
+async function saveEvent(event, eventCard) {
   // Update the event object with the edited values
   event.name = eventNameField.value;
   event.date = eventDateField.value;
   event.time = eventTimeField.value;
   event.notes = eventNotesField.value;
+  event.location.address = eventLocationField.value;
 
+
+  // Geocode the new location to get lat/lng
+  const newLocationAddress = eventLocationField.value;
+  try {
+    const coordinates = await geocodeAddress(newLocationAddress);
+    if (coordinates && coordinates.lat && coordinates.lng) {
+        if (coordinates.lat !== event.location.lat || coordinates.lng !== event.location.lng) {
+            event.location.lat = coordinates.lat;
+            event.location.lng = coordinates.lng;
+            event.location.address = newLocationAddress;
+        }
+    } else {
+        console.error('Invalid coordinates returned for address:', newLocationAddress);
+    }
+  } catch (error) {
+    console.error('Error occurred during geocoding:', error);
+  }
+ 
   // Retrieve the updated events from local storage
   let events = JSON.parse(localStorage.getItem('events')) || [];
 
@@ -296,17 +267,13 @@ function saveEvent(event, eventCard) {
   displayEvents();
 }
 
-
-
 // Function to delete an event
 function deleteEvent(event) {
   // Retrieve the events from local storage
   let events = JSON.parse(localStorage.getItem('events')) || [];
 
   // Find the index of the event in the array
-  const eventIndex = events.findIndex(
-    e => e.name === event.name && e.date === event.date && e.location.lat === event.location.lat && e.location.lng === event.location.lng
-  );
+  const eventIndex = events.findIndex(e => e.id === event.id);
 
   // Remove the event from the array
   events.splice(eventIndex, 1);
