@@ -75,12 +75,24 @@ function updateIntakeLog() {
     const intakeLogElement = document.getElementById('intakeLog');
     const waterEntries = Lockr.get('waterEntries', []);
     intakeLogElement.innerHTML = '';
+
+    // Group water entries by date
+    const groupedEntries = {};
     waterEntries.forEach(entry => {
-        const entryDate = moment(entry.timestamp).format('YYYY-MM-DD HH:mm:ss');
-        const entryAmount = entry.waterIntake;
-        const entryElement = document.createElement('p');
-        entryElement.textContent = `Time: ${entryDate}, Amount: ${entryAmount} ml`;
-        intakeLogElement.appendChild(entryElement);
+        const entryDate = moment(entry.timestamp).format('YYYY-MM-DD');
+        if (!groupedEntries[entryDate]) {
+            groupedEntries[entryDate] = 0;
+        }
+        groupedEntries[entryDate] += entry.waterIntake;
+    });
+
+    // Display daily water intake
+    const dailyIntakeContainer = document.querySelector('.daily-intake');
+    dailyIntakeContainer.innerHTML = '';
+    Object.keys(groupedEntries).forEach(date => {
+        const dailyIntakeElement = document.createElement('p');
+        dailyIntakeElement.textContent = `${moment(date).format('MMMM D')}: ${groupedEntries[date]} ml`;
+        dailyIntakeContainer.appendChild(dailyIntakeElement);
     });
 }
 document.addEventListener('DOMContentLoaded', function() {
