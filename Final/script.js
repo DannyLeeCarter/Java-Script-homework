@@ -234,17 +234,19 @@ async function saveEvent(event, eventCard) {
   } catch (error) {
     console.error('Error occurred during geocoding:', error);
   }
- 
+  event.location = {
+    lat: coordinates.lat,
+    lng: coordinates.lng,
+    address: newLocationAddress
+};
+console.log("Newly assigned event location:", event.location);
+console.log("New location address:", newLocationAddress);
+
   // Retrieve the updated events from local storage
   let events = JSON.parse(localStorage.getItem('events')) || [];
 
-  // Find the index of the event in the array
-  const eventIndex = events.findIndex(
-    e => e.name === event.name && e.date === event.date && e.location.lat === event.location.lat && e.location.lng === event.location.lng
-  );
-
-  // Update the event in the array
-  events[eventIndex] = event;
+  // Update the event in the Map or Object
+events[event.id] = event;
 
   // Store the updated events array in local storage
   localStorage.setItem('events', JSON.stringify(events));

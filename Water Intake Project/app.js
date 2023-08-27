@@ -67,9 +67,22 @@ function logWaterIntake() {
         document.getElementById('totalWaterConsumed').textContent = `${totalWater} ml`;
         document.getElementById('waterIntake').value = '';
         updateGraph();
+        updateIntakeLog();
     }
 }
-
+// Function to update the intake log
+function updateIntakeLog() {
+    const intakeLogElement = document.getElementById('intakeLog');
+    const waterEntries = Lockr.get('waterEntries', []);
+    intakeLogElement.innerHTML = '';
+    waterEntries.forEach(entry => {
+        const entryDate = moment(entry.timestamp).format('YYYY-MM-DD HH:mm:ss');
+        const entryAmount = entry.waterIntake;
+        const entryElement = document.createElement('p');
+        entryElement.textContent = `Time: ${entryDate}, Amount: ${entryAmount} ml`;
+        intakeLogElement.appendChild(entryElement);
+    });
+}
 document.addEventListener('DOMContentLoaded', function() {
     // Function to initialize the graph
     function initializeGraph() {
